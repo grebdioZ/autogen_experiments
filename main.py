@@ -17,7 +17,7 @@ def main():
     factchecker  = AssistantAgent(name="FactChecker", system_message="Verify facts and cite sources.",       model_client=model_client)
     critic       = AssistantAgent(name="Critic",    system_message="Critique clarity and logic.",         model_client=model_client)
     summarizer   = AssistantAgent(name="Summarizer",system_message="Condense into a brief executive summary.", model_client=model_client)
-    editor       = AssistantAgent(name="Editor",    system_message="Polish language and signal APPROVED when done.", model_client=model_client)
+    editor       = AssistantAgent(name="Editor",    system_message="Do some language polishing and signal APPROVED when done.", model_client=model_client)
         
     max_msgs = MaxMessageTermination(max_messages=20)
     text_term = TextMentionTermination(text="APPROVED", sources=["Editor"])
@@ -33,7 +33,7 @@ def main():
         name="Host",
         model_client=model_client,
         tools=[deepdive_tool],
-        system_message="You have access to a DeepDive tool for in-depth research."
+        system_message="You have access to a DeepDive tool for in-depth research.",
     )
 
     async def run_deepdive(topic: str):

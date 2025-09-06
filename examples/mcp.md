@@ -1,6 +1,8 @@
 SUMMARY
 =======
 
+Model: qwen3 (8b)
+
 # Round 1:
 
 - The researcher comes up with a brief introduction, then 6 points, then a conclusion
