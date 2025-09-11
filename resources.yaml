@@ -1,0 +1,21 @@
+models:
+  - name: "gemma3:1b"
+    type: "ollama"
+    info:
+      family: "gemma3"
+      vision: false
+      function_calling: true
+      json_output: true
+      structured_output: true
+      multiple_system_messages: false
+  
+  - name: "qwen3:0.6b"
+    type: "ollama"
+    # name: "qwen3:4b" # did not terminate on my RTX2080TI?
+
+  - name: "gpt-4.1-nano"
+    type: "openai"
+    default: true
+    deployment: "gpt-4.1-nano-2025-04-14"
+    api-version: "2025-03-01-preview"
+    api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"
