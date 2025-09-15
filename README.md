@@ -37,14 +37,14 @@ Conceptual flow:
 ┌────────────────┐    load / pick     ┌────────────────────────┐
 │ resources.yaml │ ─────────────────▶ │ create_chat_completion │
 └────────────────┘                    │  (factory)             │
-									  └─────────┬──────────────┘
-												│ returns model client
-									  wrap for   │
-									  tokens ───▶ via wrap_chat_client_for_tokens()
-												│
-									  orchestrate multi-agent prompts (notebook)
-												│
-									  log_token_usage(...) → token_usage_log.csv
+                                      └─────────┬──────────────┘
+                                                │ returns model client
+                                      wrap for   │
+                                      tokens ───▶ via wrap_chat_client_for_tokens()
+                                                │
+                                      orchestrate multi-agent prompts (notebook)
+                                                │
+                                      log_token_usage(...) → token_usage_log.csv
 ```
 
 ---
@@ -52,21 +52,22 @@ Conceptual flow:
 ## 3. Key Components
 
 ### 3.1 `resources.yaml`
+
 Defines available model endpoints. Example snippet:
 
 ```yaml
 models:
-	- name: "gemma3:1b"
-		type: "ollama"
-		info:
-			family: "gemma3"
-			function_calling: true
-	- name: "gpt-4.1-nano"
-		type: "openai"
-		default: true
-		deployment: "gpt-4.1-nano-2025-04-14"
-		api-version: "2025-03-01-preview"
-		api-base: "https://<your-azure-endpoint>/openai/v1/"
+    - name: "gemma3:1b"
+        type: "ollama"
+        info:
+            family: "gemma3"
+            function_calling: true
+    - name: "gpt-4.1-nano"
+        type: "openai"
+        default: true
+        deployment: "gpt-4.1-nano-2025-04-14"
+        api-version: "2025-03-01-preview"
+        api-base: "https://<your-azure-endpoint>/openai/v1/"
 ```
 
 Add or remove entries to experiment with different providers / model families.
@@ -74,7 +75,7 @@ Add or remove entries to experiment with different providers / model families.
 ### 3.2 `tools.py`
 
 Provides `create_chat_completion_client(model_dict)` which:
- 
+
 * Accepts a parsed dict from `resources.yaml`
 * Returns an `OpenAIChatCompletionClient` or `OllamaChatCompletionClient`
 * Normalizes optional `ModelInfo` metadata (e.g., capabilities) for downstream logic
@@ -300,4 +301,3 @@ $env:AZURE_OPENAI_API_KEY = "<key>"
 ---
 
 Happy experimenting! If you add interesting orchestration patterns, consider documenting them in a new `examples/` file so others can learn from successes *and* failures.
-
