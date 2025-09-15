@@ -39,7 +39,7 @@ Conceptual flow:
 └────────────────┘                    │  (factory)             │
                                       └─────────┬──────────────┘
                                                 │ returns model client
-                                      wrap for   │
+                                      wrap for  │
                                       tokens ───▶ via wrap_chat_client_for_tokens()
                                                 │
                                       orchestrate multi-agent prompts (notebook)
