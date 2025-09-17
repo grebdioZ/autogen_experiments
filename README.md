@@ -135,6 +135,14 @@ $env:AZURE_OPENAI_API_KEY = "<your-key>"
 
 You may also set `OLLAMA_HOST` if running Ollama remotely.
 
+For Tavily web search (now integrated as an optional tool), set:
+
+```pwsh
+$env:TAVILY_API_KEY = "<your-tavily-key>"
+```
+
+If `TAVILY_API_KEY` is not present, agents that rely on the Tavily tool will raise an assertion error when the tool is first invoked. Remove the tool from `agentConfig` in the notebook if you prefer to run without it.
+
 ### 4.4 Launch the Notebook
 
 ```pwsh
