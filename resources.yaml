@@ -28,14 +28,14 @@ models:
 
   - name: "gpt-4.1-nano"
     type: "openai"
-    default: true
+    default: false
     deployment: "gpt-4.1-nano-2025-04-14"
     api-version: "2025-03-01-preview"
     api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"
 
   - name: "gpt-5-nano"
     type: "openai"
-    default: false
+    default: true
     deployment: "gpt-5-nano-2025-08-07"
     api-version: "2025-03-01-preview"
     api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"

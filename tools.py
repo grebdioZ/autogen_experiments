@@ -1,14 +1,14 @@
-import os
+import asyncio
 import json
-import httpx
+import os
+from typing import Any, Dict, List
 
+import httpx
+from autogen_agentchat.agents import AssistantAgent
 from autogen_core.models import ChatCompletionClient, ModelInfo
 from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import SseMcpToolAdapter, SseServerParams
-from autogen_agentchat.agents import AssistantAgent
-from typing import List, Dict, Any
-import asyncio
 
 
 def create_chat_completion_client(model) -> ChatCompletionClient:
@@ -17,7 +17,7 @@ def create_chat_completion_client(model) -> ChatCompletionClient:
             model=model.get("deployment", model["name"]),
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
             base_url=model.get("api-base", None),
-            api_version=model.get("api-version", None),
+            api_version=model.get("api-version", None),  # type: ignore
             model_info=ModelInfo(**model["info"]) if "info" in model else None,
         )
     else:
@@ -27,7 +27,7 @@ def create_chat_completion_client(model) -> ChatCompletionClient:
             model_client = OllamaChatCompletionClient(
                 model=model["name"],
                 model_info=model_info,
-                parallel_tool_calls=False,
+                parallel_tool_calls=False,  # type: ignore
             )
         else:
             raise ValueError(f"Unsupported model type: {model['type']}")
@@ -54,7 +54,7 @@ async def get_rag_web_browser_tool():
     return rag_web_browser_tool
 
 
-def adjust_properties_for_fixed_response(props: dict, fixed_response: str) -> dict:
+def adjust_properties_for_fixed_response(props: dict, fixed_response: str) -> None:
     def provide_response_tool(question: str) -> str:
         return fixed_response
 
