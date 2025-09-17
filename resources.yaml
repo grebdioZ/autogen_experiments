@@ -9,40 +9,34 @@ models:
       structured_output: true
       multiple_system_messages: false
   
-models:
-  - name: "gemma3:1b"
-    type: "ollama"
-    info:
-      family: "gemma3"
-      vision: false
-      function_calling: true
-      json_output: true
-      structured_output: true
-      multiple_system_messages: false
-  
   - name: "qwen3:0.6b"
     type: "ollama"
     # name: "qwen3:4b" # did not terminate on my RTX2080TI?
 
-# See https://fraunhofer.sharepoint.com/sites/it-sicherheit/SitePages/FhGenie-API.aspx for available FhG models
+  #--------------------------------------------------------------------
+  # Azure OpenAI models hosted by Fraunhofer
+  # See https://fraunhofer.sharepoint.com/sites/it-sicherheit/SitePages/FhGenie-API.aspx for available FhG models
 
   - name: "gpt-4.1-nano"
     type: "openai"
-    default: false
     deployment: "gpt-4.1-nano-2025-04-14"
     api-version: "2025-03-01-preview"
     api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"
+    _approx-cost-per-input-megatoken_usd: 0.05
+    _approx-cost-per-output-megatoken_usd: 0.20
 
   - name: "gpt-5-nano"
     type: "openai"
-    default: true
     deployment: "gpt-5-nano-2025-08-07"
     api-version: "2025-03-01-preview"
     api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"
+    _approx-cost-per-input-megatoken_usd: 0.05
+    _approx-cost-per-output-megatoken_usd: 0.40
 
   - name: "gpt-5-mini"
     type: "openai"
-    default: false
     deployment: "gpt-5-mini-2025-08-07"
     api-version: "2025-03-01-preview"
     api-base: "https://fhgenie-api-mevis-mevis-mas.openai.azure.com/openai/v1/"
+    _approx-cost-per-input-megatoken_usd: 0.25
+    _approx-cost-per-output-megatoken_usd: 2.00

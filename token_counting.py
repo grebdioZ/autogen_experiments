@@ -14,12 +14,12 @@ appropriate so they can be safely used in exploratory notebooks.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Iterable, List, Mapping, Sequence
 import asyncio
-import os
 import csv
 import datetime
+import os
+from dataclasses import dataclass
+from typing import Any, Iterable, List, Mapping, Sequence
 
 __all__ = [
     "wrap_chat_client_for_tokens",
@@ -201,19 +201,39 @@ def print_token_usage_with_estimate(
     client: Any,
     messages: Sequence[Any] | None = None,
     participantNames: Iterable[str] | None = None,
+    model_info: dict | None = None,
 ) -> None:
+    """Print token usage and estimated cost if model_info is provided."""
     native = getattr(client, "_token_usage_accumulator", None)
     native_total = getattr(native, "total", 0) if native else 0
     if native_total > 0:
         print_token_usage(client)
-        return
-    if messages is None:
-        print("No native usage; supply messages for estimation.")
-        return
-    est = estimate_conversation_tokens(messages, participantNames)
-    print(
-        f"Estimated token usage -> prompt: {est['prompt']}, completion: {est['completion']}, total: {est['total']} (method={est['method']})"
-    )
+        usage = native
+    else:
+        if messages is None:
+            print("No native usage; supply messages for estimation.")
+            return
+        est = estimate_conversation_tokens(messages, participantNames)
+        print(
+            f"Estimated token usage -> prompt: {est['prompt']}, completion: {est['completion']}, total: {est['total']} (method={est['method']})"
+        )
+        usage = type("Obj", (), est)  # hack: allow attribute access
+    # Compute cost if model_info is provided
+    if model_info:
+        model_type = model_info.get("type", "")
+        if model_type.lower() == "ollama":
+            in_cost = out_cost = 0.0
+        else:
+            in_cost = float(model_info.get("_approx-cost-per-input-megatoken_usd", 0))
+            out_cost = float(model_info.get("_approx-cost-per-output-megatoken_usd", 0))
+        input_tokens = getattr(usage, "prompt", 0)
+        output_tokens = getattr(usage, "completion", 0)
+        input_cost = (input_tokens / 1e6) * in_cost
+        output_cost = (output_tokens / 1e6) * out_cost
+        total_cost = input_cost + output_cost
+        print(
+            f"Approximate cost for this run: ${total_cost:.4f} USD (input: ${input_cost:.4f}, output: ${output_cost:.4f})"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -227,11 +247,13 @@ def log_token_usage(
     messages: Sequence[Any] | None,
     participantNames: Iterable[str] | None = None,
     csv_path: str = "token_usage_log.csv",
+    model_info: dict | None = None,
 ) -> dict:
     """Append usage information (native or estimated) to a CSV.
 
     Returns the row dict that was logged.
     """
+
     native = getattr(client, "_token_usage_accumulator", None)
     if native and getattr(native, "total", 0) > 0:
         data = {
@@ -245,6 +267,22 @@ def log_token_usage(
             raise ValueError("messages must be provided when native usage is absent")
         est = estimate_conversation_tokens(messages, participantNames)
         data = {**est}
+
+    # Compute cost if model_info is provided
+    input_cost = output_cost = total_cost = None
+    if model_info:
+        model_type = model_info.get("type", "")
+        if model_type.lower() == "ollama":
+            in_cost = out_cost = 0.0
+        else:
+            in_cost = float(model_info.get("_approx-cost-per-input-megatoken_usd", 0))
+            out_cost = float(model_info.get("_approx-cost-per-output-megatoken_usd", 0))
+        input_tokens = data["prompt"]
+        output_tokens = data["completion"]
+        input_cost = (input_tokens / 1e6) * in_cost
+        output_cost = (output_tokens / 1e6) * out_cost
+        total_cost = input_cost + output_cost
+
     row = {
         "timestamp": datetime.datetime.now(datetime.UTC).isoformat(),
         "topic": topic,
@@ -253,6 +291,10 @@ def log_token_usage(
         "total": data["total"],
         "method": data.get("method", "native"),
     }
+    if total_cost is not None:
+        row["cost_usd"] = round(float(total_cost or 0.0), 6)
+        row["input_cost_usd"] = round(float(input_cost or 0.0), 6)
+        row["output_cost_usd"] = round(float(output_cost or 0.0), 6)
 
     file_exists = os.path.isfile(csv_path)
     with open(csv_path, "a", newline="", encoding="utf-8") as f:

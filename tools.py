@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+from datetime import datetime
 from typing import Any, Dict, List
 
 import httpx
@@ -32,6 +33,15 @@ def create_chat_completion_client(model) -> ChatCompletionClient:
         else:
             raise ValueError(f"Unsupported model type: {model['type']}")
     return model_client
+
+
+def current_datetime_utc_tool() -> Any:
+    """Return a callable tool that provides the current date and time."""
+    return datetime.utcnow().isoformat()
+
+
+def get_attributes(obj):
+    return [attr for attr in dir(obj) if not attr.startswith("_")]
 
 
 async def get_rag_web_browser_tool():
