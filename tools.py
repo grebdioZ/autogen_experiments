@@ -35,6 +35,9 @@ def create_chat_completion_client(model) -> ChatCompletionClient:
 
 
 async def get_rag_web_browser_tool():
+    """
+    Not recommended, use the Tavily search tool instead.
+    """
     assert os.getenv("APIFY_API_KEY"), "APIFY_API_KEY environment variable is not set."
     # Setup server params for SSE access
     server_params = SseServerParams(
