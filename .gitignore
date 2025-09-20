@@ -9,3 +9,5 @@ token_usage_log.csv
 
 # Virtual environments
 .venv
+
+.env
