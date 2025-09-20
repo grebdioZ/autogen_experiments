@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+from socket import timeout
 
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
@@ -15,7 +16,11 @@ from autogen_ext.tools.mcp import (
 from dotenv import load_dotenv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from tools import create_chat_completion_client, load_model_config
+from tools import (
+    create_chat_completion_client,
+    get_tavily_search_tool,
+    load_model_config,
+)
 
 # Get environment variables
 load_dotenv()
@@ -23,11 +28,14 @@ model_config = load_model_config()
 print("Used model:", model_config["name"])
 OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 APIFY_API_KEY = os.getenv("APIFY_API_KEY")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
-INCLUDE_WEB_SEARCH = False
+INCLUDE_WEB_SEARCH = True
 
-if INCLUDE_WEB_SEARCH and not APIFY_API_KEY:
-    raise ValueError("APIFY_API_KEY environment variable is not set.")
+if INCLUDE_WEB_SEARCH and not APIFY_API_KEY and not TAVILY_API_KEY:
+    raise ValueError(
+        "APIFY_API_KEY and TAVILY_API_KEY environment variables are not set."
+    )
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY environment variable is not set.")
@@ -56,22 +64,27 @@ async def main() -> None:
     all_tools = add_and_multiply_tools + subttract_and_divide_tools
 
     if INCLUDE_WEB_SEARCH:
-        # Setup server params for SSE access
-        server_params = SseServerParams(
-            url="https://rag-web-browser.apify.actor/sse",  # Removed limits from URL
-            headers={"Authorization": f"Bearer {APIFY_API_KEY}"},
-            timeout=30,
-        )
 
-        # Create the tool adapter for the SSE server
-        # Note: The tool adapter is created using the server_params and the tool name.
-        # Ensure the tool name matches the one expected by the server
-        # You may need to adjust this based on the actual tool name provided by the server
-        rag_web_search_tool = await SseMcpToolAdapter.from_server_params(
-            server_params,
-            "rag-web-browser",
-        )
-        all_tools.append(rag_web_search_tool)
+        if False and os.getenv("APIFY_API_KEY"):
+            # Setup server params for SSE access
+            server_params = SseServerParams(
+                url="https://rag-web-browser.apify.actor/sse",  # Removed limits from URL
+                headers={"Authorization": f"Bearer {os.getenv("APIFY_API_KEY")}"},
+                timeout=30,
+            )
+
+            # Create the tool adapter for the SSE server
+            # Note: The tool adapter is created using the server_params and the tool name.
+            # Ensure the tool name matches the one expected by the server
+            # You may need to adjust this based on the actual tool name provided by the server
+            rag_web_search_tool = await SseMcpToolAdapter.from_server_params(
+                server_params,
+                "rag-web-browser",
+            )
+            all_tools.append(rag_web_search_tool)
+
+        if os.getenv("TAVILY_API_KEY"):
+            all_tools.append(await get_tavily_search_tool())
 
     model_config = load_model_config()
     model_client = create_chat_completion_client(model_config)
@@ -96,11 +109,11 @@ async def main() -> None:
                 cancellation_token=CancellationToken(),
             )
         )
-    await Console(
-        agent.run_stream(
-            task="what's (3 * 5) - 12?", cancellation_token=CancellationToken()
-        )
-    )
+    # await Console(
+    #     agent.run_stream(
+    #         task="what's (3 * 5) - 12?", cancellation_token=CancellationToken()
+    #     )
+    # )
 
 
 asyncio.run(main())
