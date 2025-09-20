@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 import httpx
+import yaml
 from autogen_agentchat.agents import AssistantAgent
 from autogen_core.models import ChatCompletionClient, ModelInfo
 from autogen_ext.models.ollama import OllamaChatCompletionClient
@@ -12,26 +13,48 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import SseMcpToolAdapter, SseServerParams
 
 
-def create_chat_completion_client(model) -> ChatCompletionClient:
-    if model["type"] == "openai":
+def load_model_config(
+    config_path: str | None = None, model_name: str | None = None
+) -> Dict[str, Any]:
+    """Load configuration from a YAML file."""
+    if config_path is None:
+        config_path = os.path.dirname(__file__) + "/resources.yaml"
+    with open(config_path, "r") as f:
+        config = yaml.load(f, Loader=yaml.SafeLoader)
+
+    model_name = model_name or os.getenv("DEFAULT_MODEL_NAME") or "GPT-4.1-Nano"
+    model = [
+        m for m in config["models"] if m.get("name", "").lower() == model_name.lower()
+    ][0]
+    print("Using model:", model["name"], "type:", model["type"])
+
+    return model
+
+
+def create_chat_completion_client(model_config) -> ChatCompletionClient:
+    if model_config["type"] == "openai":
         model_client = OpenAIChatCompletionClient(
-            model=model.get("deployment", model["name"]),
+            model=model_config.get("deployment", model_config["name"]),
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-            base_url=model.get("api-base", None),
-            api_version=model.get("api-version", None),  # type: ignore
-            model_info=ModelInfo(**model["info"]) if "info" in model else None,
+            base_url=model_config.get("api-base", None),
+            api_version=model_config.get("api-version", None),  # type: ignore
+            model_info=(
+                ModelInfo(**model_config["info"]) if "info" in model_config else None
+            ),
         )
     else:
-        model_info = ModelInfo(**model["info"]) if "info" in model else None
-        if model["type"] == "ollama":
+        model_info = (
+            ModelInfo(**model_config["info"]) if "info" in model_config else None
+        )
+        if model_config["type"] == "ollama":
             # Initialize the model client
             model_client = OllamaChatCompletionClient(
-                model=model["name"],
+                model=model_config["name"],
                 model_info=model_info,
                 parallel_tool_calls=False,  # type: ignore
             )
         else:
-            raise ValueError(f"Unsupported model type: {model['type']}")
+            raise ValueError(f"Unsupported model type: {model_config['type']}")
     return model_client
 
 

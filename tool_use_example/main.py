@@ -6,17 +6,19 @@ Usage examples:
 """
 
 from __future__ import annotations
+
+import argparse
 import asyncio
 import os
-import argparse
-from dotenv import load_dotenv
-from autogen_ext.models.openai import OpenAIChatCompletionClient
-from autogen_ext.tools.mcp import StdioServerParams, mcp_server_tools
+from venv import create
+
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
 from autogen_core import CancellationToken
+from autogen_ext.tools.mcp import StdioServerParams, mcp_server_tools
+from dotenv import load_dotenv
 
-from mcp.server.fastmcp import FastMCP
+from tools import create_chat_completion_client, load_model_config
 
 
 async def run_agent(image: str, interactive: bool) -> None:
@@ -26,12 +28,6 @@ async def run_agent(image: str, interactive: bool) -> None:
         raise ValueError(
             "No OpenAI API key found (AZURE_OPENAI_API_KEY or OPENAI_API_KEY)"
         )
-
-    model_client = OpenAIChatCompletionClient(
-        model=os.getenv("OPENAI_DEFAULT_MODEL"),
-        api_key=api_key,
-        base_url=os.getenv("OPENAI_API_BASE"),
-    )
 
     opencv_server = StdioServerParams(command="uvx", args=["opencv-mcp-server"])
     opencv_tools = await mcp_server_tools(opencv_server)
@@ -44,6 +40,8 @@ async def run_agent(image: str, interactive: bool) -> None:
         "note that a classifier is not yet integrated."
     )
 
+    model_config = load_model_config()
+    model_client = create_chat_completion_client(model_config)
     agent = AssistantAgent(
         name="lesion_analyst",
         model_client=model_client,
