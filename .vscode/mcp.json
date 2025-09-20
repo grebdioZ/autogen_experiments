@@ -1,0 +1,18 @@
+// {
+// 	"servers": {
+// 		"autogen_ag2-docs-search": {
+// 			"type": "stdio",
+// 			"command": "npx",
+// 			"args": [
+// 				"-y",
+// 				"@buger/docs-mcp@latest",
+// 				"--gitUrl",
+// 				"https://github.com/ag2ai/ag2",
+// 				"--toolName",
+// 				"search_autogen_ag2_docs",
+// 				"--toolDescription",
+// 				"Search autogen (AG2) Documentation"
+// 			],
+// 		}
+//   	}		
+// }
