@@ -84,14 +84,14 @@ async def main() -> None:
             all_tools.append(rag_web_search_tool)
 
         if os.getenv("TAVILY_API_KEY"):
-            all_tools.append(await get_tavily_search_tool())
+            all_tools.append(await get_tavily_search_tool())  # type: ignore
 
     model_config = load_model_config()
     model_client = create_chat_completion_client(model_config)
     agent = AssistantAgent(
         name="demo_agent",
         model_client=model_client,
-        tools=all_tools,
+        tools=all_tools,  # type: ignore
         reflect_on_tool_use=True,
         system_message=(
             "You are an intelligent assistant with access to tools such as 'adapter', "
