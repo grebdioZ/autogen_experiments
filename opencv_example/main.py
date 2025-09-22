@@ -11,7 +11,6 @@ import argparse
 import asyncio
 import os
 import sys
-from unittest import result
 
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
@@ -19,8 +18,8 @@ from autogen_core import CancellationToken
 from autogen_ext.tools.mcp import StdioServerParams, mcp_server_tools
 from dotenv import load_dotenv
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from tools import create_chat_completion_client, load_model_config
+sys.path.append(os.path.abspath(".."))
+from utilities import create_chat_completion_client, load_model_config
 
 
 async def run_agent(image: str, interactive: bool) -> None:

@@ -1,12 +1,10 @@
 import asyncio
 import os
 import sys
-from socket import timeout
 
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
 from autogen_core import CancellationToken
-from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import (
     SseMcpToolAdapter,
     SseServerParams,
@@ -15,8 +13,8 @@ from autogen_ext.tools.mcp import (
 )
 from dotenv import load_dotenv
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from tools import (
+sys.path.append(os.path.abspath(".."))
+from utilities import (
     create_chat_completion_client,
     get_tavily_search_tool,
     load_model_config,

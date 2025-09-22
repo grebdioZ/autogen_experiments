@@ -1,13 +1,11 @@
 import asyncio
-import json
 import os
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from dotenv import load_dotenv
 import httpx
 import yaml
-from autogen_agentchat.agents import AssistantAgent
 from autogen_core.models import ChatCompletionClient, ModelInfo
 from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_ext.models.openai import OpenAIChatCompletionClient
@@ -20,7 +18,7 @@ def load_model_config(
     config_path: str | None = None, model_name: str | None = None
 ) -> Dict[str, Any]:
     """Load configuration from a YAML file."""
-    file_path = os.path.dirname(__file__)
+    file_path = os.path.dirname(os.path.dirname(__file__))
     if config_path is None:
         config_path = file_path + "/resources.yaml"
     with open(config_path, "r", encoding="utf-8") as f:
