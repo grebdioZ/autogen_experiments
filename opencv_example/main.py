@@ -11,7 +11,7 @@ import argparse
 import asyncio
 import os
 import sys
-from venv import create
+from unittest import result
 
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
@@ -30,16 +30,20 @@ async def run_agent(image: str, interactive: bool) -> None:
         raise ValueError(
             "No OpenAI API key found (AZURE_OPENAI_API_KEY or OPENAI_API_KEY)"
         )
-
-    opencv_server = StdioServerParams(command="uvx", args=["opencv-mcp-server"])
+    # FIXME: Due to a version incompatibility, you currently (opencv-mcp-server 0.1.1 with latest FastMCP)
+    # need to patch
+    #   mcp.server.fastmcp.server.FastMCP.__init__ to add a description parameter:
+    #     description: str | None = None,
+    # and use the uv run instead of uvx command so that the open CV MCP server works.
+    # opencv_server = StdioServerParams(command="uvx", args=["opencv-mcp-server"])
+    opencv_server = StdioServerParams(command="uv", args=["run", "opencv-mcp-server"])
     opencv_tools = await mcp_server_tools(opencv_server)
 
     print("opencv_tools:", [tool.name for tool in opencv_tools])
 
     system_message = (
-        "You are a dermatology image analysis assistant with OpenCV tools. Always first segment the lesion, then answer "
-        "questions about area, diameters, color, and shape in pixel-based terms. Be concise. If classification is requested, "
-        "note that a classifier is not yet integrated."
+        "You are a dermatology image analysis assistant with OpenCV tools. Answer "
+        "questions about area, diameters, position or shape in pixel-based terms. Be concise."
     )
 
     model_config = load_model_config()
@@ -50,13 +54,16 @@ async def run_agent(image: str, interactive: bool) -> None:
         tools=opencv_tools,
         reflect_on_tool_use=True,
         system_message=system_message,
+        max_tool_iterations=20,
     )
 
-    initial_task = f"Detect and segment the lesion using a DNN in the image at: {image}. Save a visualization of the result in a jpg file in the C:\dev\git\skin_lesion_classification\results folder. Then provide area (px^2), major/minor diameters (px), and mean BGR color."
-    await Console(
+    initial_task = Rf"Segment the lesion of the image at {image} selecting the single largest connected component on the inverted thresholding result. Save a visualization of the uncropped result in a jpg file. Then provide center position, area (px^2), major/minor diameters (px), and mean grey value in [0, 1] of the segmented object."
+    result = await Console(
         agent.run_stream(task=initial_task, cancellation_token=CancellationToken())
     )
 
+    print("Total number of messages: ", len(result.messages))
+    # print("Stop reason:", result.stop_reason)  # always seems to be "None"
     if not interactive:
         return
 
@@ -80,7 +87,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--image",
         required=False,
-        default=R"data\HAM10000_images_part_1\ISIC_0029236.jpg",
+        default=R"data\HAM10000_images_part_1\ISIC_0029236_gray.jpg",
         help="Path to lesion image",
     )
     parser.add_argument(

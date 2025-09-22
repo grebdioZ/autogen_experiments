@@ -7,6 +7,11 @@ Message Sequence:
  - Summarizer
  - Editor
 
+ USER
+ ====
+
+ What is Fraunhofer MEVIS?
+
  Researcher
  ==========
  
@@ -82,21 +87,14 @@ Structure:
 
 - Then deeper sections:
 
-1) Identity and mission (cite MEVIS "About MEVIS").
-
-2) Focus areas and research themes (cite the "About" as general; "Portfolio/Solutions" page). We'll mention that they combine image computing, data analytics, AI, and software for early detection, diagnosis, and therapy across medical domains.
-
-3) Core capabilities: algorithm development, medical image analysis, software tool development, clinical deployment, regulatory compliance (FDA/CE)? They likely work with CE marking; Considering "healthcare software" they'd have compliance. But uncertain. We can avoid specific regulatory details.
-
-4) Impact and application domains: radiology, oncology, neurology, cardiology; Could mention "image-guided therapy" used in interventional radiology; BE careful.
-
-5) Collaboration and ecosystem: network of clinical and academic partners worldwide; mention both.
-
-6) How to engage: research collaboration, licensing, partnerships, contract research (CRO). Provide the link to "solutions" page and "about".
-
-7) Notable projects/products: Without specifics, we can mention "Examples of their solution areas include computer-aided detection and therapy planning; see Solutions page for details." We'll avoid listing.
-
-8) Quick facts: approximate staff size? We don't know; But we could avoid giving numbers.
+  1) Identity and mission (cite MEVIS "About MEVIS").
+  2) Focus areas and research themes (cite the "About" as general; "Portfolio/Solutions" page). We'll mention that they combine image computing, data analytics, AI, and software for early detection, diagnosis, and therapy across medical domains.
+  3) Core capabilities: algorithm development, medical image analysis, software tool development, clinical deployment, regulatory compliance (FDA/CE)? They likely work with CE marking; Considering "healthcare software" they'd have compliance. But uncertain. We can avoid specific regulatory details.
+  4) Impact and application domains: radiology, oncology, neurology, cardiology; Could mention "image-guided therapy" used in interventional radiology; BE careful.
+  5) Collaboration and ecosystem: network of clinical and academic partners worldwide; mention both.
+  6) How to engage: research collaboration, licensing, partnerships, contract research (CRO). Provide the link to "solutions" page and "about".
+  7) Notable projects/products: Without specifics, we can mention "Examples of their solution areas include computer-aided detection and therapy planning; see Solutions page for details." We'll avoid listing.
+  8) Quick facts: approximate staff size? We don't know; But we could avoid giving numbers.
 
 We should avoid making up numbers.
 
@@ -129,21 +127,21 @@ Let's craft:
 
 - Then sections:
 
-1) What it is: description.
+  1) What it is: description.
 
-2) History and organization: It's a Fraunhofer institute located in Bremen, Germany; part of Fraunhofer-Gesellschaft; Focus on digital medicine.
+  2) History and organization: It's a Fraunhofer institute located in Bremen, Germany; part of Fraunhofer-Gesellschaft; Focus on digital medicine.
 
-3) Research and technology: "medical image computing", "image-guided therapy", "healthcare informatics"; AI & data-driven methods; "Clinical data fusion", "multi-modal imaging".
+  3) Research and technology: "medical image computing", "image-guided therapy", "healthcare informatics"; AI & data-driven methods; "Clinical data fusion", "multi-modal imaging".
 
-4) Platforms and solutions: "portfolio of software solutions" bridging detection/diagnosis/therapy; "Clinical adoption across hospitals", "collaborations".
+  4) Platforms and solutions: "portfolio of software solutions" bridging detection/diagnosis/therapy; "Clinical adoption across hospitals", "collaborations".
 
-5) How they work: "co-developments, contract research, licensing".
+  5) How they work: "co-developments, contract research, licensing".
 
-6) Why it matters: "improved early detection, personalized therapy, reduction of cost".
+  6) Why it matters: "improved early detection, personalized therapy, reduction of cost".
 
-7) Notable spaces and examples: We'll mention "image computing, computer-aided interventions, and healthcare information management" as core.
+  7) Notable spaces and examples: We'll mention "image computing, computer-aided interventions, and healthcare information management" as core.
 
-8) How to engage and who to contact.
+  8) How to engage and who to contact.
 
 Ensure to "add important web references" per developer instruction: We'll incorporate references and list them.
 
@@ -432,11 +430,14 @@ Editor: APPROVED
 Polished final deep-dive on Fraunhofer MEVIS (fact-checked updates)
 
 Executive overview
+
 - Fraunhofer MEVIS is a Fraunhofer-Gesellschaft institute focused on digital medicine, specializing in image-based medicine, medical image computing, and image-guided care. Its mission is to translate research into real-world software that supports early detection, diagnosis, and therapy using imaging and data.
 - Origin: MEVIS began as the Bremen-based MeVis Research group and joined Fraunhofer as Fraunhofer MEVIS in January 2009.
 - Location and identity: The institute is based in Bremen, Germany, with campus associations tied to the University of Bremen. It is a distinct entity from MeVis Medical Solutions AG (a separate Bremen-based company).
 
-What Fraunhofer MEVIS is
+What Fraunhofer MEVIS is:
+---
+
 - Identity and focus: A Fraunhofer-Gesellschaft institute dedicated to digital medicine, emphasizing image-based medicine, medical image computing, and image-guided care.
 - Mission: To translate research into deployable software solutions that support early detection, diagnosis, and therapy using imaging and data.
 - Framing sources: MEVIS’ own materials confirm this focus and mission.
@@ -445,6 +446,8 @@ What Fraunhofer MEVIS is
   - Solutions portfolio: https://www.mevis.fraunhofer.de/en/portfolio/solutions/solutions.html
 
 History and origin (corrected)
+---
+
 - Origins and Fraunhofer transition: Fraunhofer MEVIS originated as the Bremen-based MeVis Research group (MeVis Research gGmbH) and became Fraunhofer MEVIS in January 2009.
 - Bremen campus/context: MEVIS’ materials describe its Bremen origins and its move to be closer to or on the University of Bremen campus.
   - History / press overview: https://www.mevis.fraunhofer.de/en/press-and-scicom.html
@@ -452,16 +455,21 @@ History and origin (corrected)
   - Campus context (Day of Architecture 2022): https://www.mevis.fraunhofer.de/en/press-and-scicom/institute-news/2022/welcome-to-fraunhofer-mevis-on-the-day-of-architecture-2022.html
 
 Location and campus
+---
+
 - Location: Bremen, Germany.
 - Campus: The institute’s communications place it on or near the University of Bremen campus, reflecting its integration with the Bremen academic environment.
 
 Relationship with MeVis Medical Solutions AG
+
 - Distinct entities: Fraunhofer MEVIS originated from MeVis Research gGmbH and joined Fraunhofer in 2009. MeVis Medical Solutions AG is a separate Bremen-based company with its own corporate history.
 - Framing: MEVIS’ official materials emphasize the MeVis Research origin and the subsequent Fraunhofer transition, rather than portraying MMS AG as a continuing single corporate lineage.
   - Source: MEVIS press/overview: https://www.mevis.fraunhofer.de/en/press-and-scicom.html
 - For full corporate history, consult MeVis Medical Solutions AG materials, since the Fraunhofer MEVIS site centers on its own origin and Fraunhofer status.
 
 What Fraunhofer MEVIS does (updated context)
+---
+
 - Research identity and mission
   - Focus: digital medicine, with emphasis on image-based medicine, medical image computing, and image-guided care.
   - Goal: turn imaging and data into deployable software for clinical use.
@@ -480,12 +488,16 @@ What Fraunhofer MEVIS does (updated context)
   - Sources: Solutions page; About MEVIS
 
 Key takeaways (concise)
+---
+
 - Fraunhofer MEVIS is the Bremen-based Fraunhofer institute for digital medicine, focusing on image-based medicine, medical image computing, and image-guided care, with a mission to translate research into deployable clinical software.
 - It originated from the Bremen MeVis Research group and joined Fraunhofer in January 2009; its Bremen campus ties are documented by MEVIS materials.
 - MEVIS operates as a translational R&D partner, collaborating with hospitals, universities, and industry to develop and deploy software that supports detection, diagnosis, and therapy planning in medical workflows.
 - It is distinct from MeVis Medical Solutions AG, a separate Bremen-based company with its own corporate history.
 
 References (official sources)
+---
+
 - About MEVIS: https://www.mevis.fraunhofer.de/en/about-mevis.html
 - MEVIS homepage: https://www.mevis.fraunhofer.de/
 - MEVIS portfolio / solutions: https://www.mevis.fraunhofer.de/en/portfolio/solutions/solutions.html
