@@ -36,7 +36,7 @@ The agent reflects on tool usage and can combine results to answer user tasks.
 4. Run the example from the sub-project root:
 
    ```powershell
-   uv run tool_use_example.py
+   uv run main.py
    ```
 
 5. Observe streamed output in the console.

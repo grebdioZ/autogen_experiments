@@ -50,4 +50,3 @@ MIT (see [`LICENSE`](LICENSE)).
 ---
 
 *Lightweight experimental space – stability not guaranteed; iterate freely.*
-

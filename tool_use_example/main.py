@@ -22,21 +22,17 @@ from utilities import (
 
 # Get environment variables
 load_dotenv()
-model_config = load_model_config()
-print("Used model:", model_config["name"])
-OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
-APIFY_API_KEY = os.getenv("APIFY_API_KEY")
-TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 INCLUDE_WEB_SEARCH = True
 
-if INCLUDE_WEB_SEARCH and not APIFY_API_KEY and not TAVILY_API_KEY:
+if (
+    INCLUDE_WEB_SEARCH
+    and not os.getenv("APIFY_API_KEY")
+    and not os.getenv("TAVILY_API_KEY")
+):
     raise ValueError(
         "APIFY_API_KEY and TAVILY_API_KEY environment variables are not set."
     )
-
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY environment variable is not set.")
 
 
 def subtract(a: float, b: float) -> float:
