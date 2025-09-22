@@ -25,11 +25,7 @@ from tools import create_chat_completion_client, load_model_config
 
 async def run_agent(image: str, interactive: bool) -> None:
     load_dotenv()
-    api_key = os.getenv("AZURE_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError(
-            "No OpenAI API key found (AZURE_OPENAI_API_KEY or OPENAI_API_KEY)"
-        )
+
     # FIXME: Due to a version incompatibility, you currently (opencv-mcp-server 0.1.1 with latest FastMCP)
     # need to patch
     #   mcp.server.fastmcp.server.FastMCP.__init__ to add a description parameter:
@@ -51,10 +47,10 @@ async def run_agent(image: str, interactive: bool) -> None:
     agent = AssistantAgent(
         name="lesion_analyst",
         model_client=model_client,
-        tools=opencv_tools,
+        tools=opencv_tools,  # type: ignore
         reflect_on_tool_use=True,
         system_message=system_message,
-        max_tool_iterations=20,
+        max_tool_iterations=10,
     )
 
     initial_task = Rf"Segment the lesion of the image at {image} selecting the single largest connected component on the inverted thresholding result. Save a visualization of the uncropped result in a jpg file. Then provide center position, area (px^2), major/minor diameters (px), and mean grey value in [0, 1] of the segmented object."

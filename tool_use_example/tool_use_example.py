@@ -109,11 +109,11 @@ async def main() -> None:
                 cancellation_token=CancellationToken(),
             )
         )
-    # await Console(
-    #     agent.run_stream(
-    #         task="what's (3 * 5) - 12?", cancellation_token=CancellationToken()
-    #     )
-    # )
+    await Console(
+        agent.run_stream(
+            task="what's (3 * 5) - 12?", cancellation_token=CancellationToken()
+        )
+    )
 
 
 asyncio.run(main())

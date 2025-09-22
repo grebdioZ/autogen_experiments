@@ -1,6 +1,7 @@
 models:
   - name: "gemma3:1b"
     type: "ollama"
+    host: "http://localhost:11434" # is the default, just for illustration
     info:
       family: "gemma3"
       vision: false

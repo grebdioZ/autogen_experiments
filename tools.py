@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List
 
+from dotenv import load_dotenv
 import httpx
 import yaml
 from autogen_agentchat.agents import AssistantAgent
@@ -12,14 +13,17 @@ from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import SseMcpToolAdapter, SseServerParams
 
+load_dotenv()
+
 
 def load_model_config(
     config_path: str | None = None, model_name: str | None = None
 ) -> Dict[str, Any]:
     """Load configuration from a YAML file."""
+    file_path = os.path.dirname(__file__)
     if config_path is None:
-        config_path = os.path.dirname(__file__) + "/resources.yaml"
-    with open(config_path, "r") as f:
+        config_path = file_path + "/resources.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
 
     model_name = model_name or os.getenv("DEFAULT_MODEL_NAME") or "GPT-4.1-Nano"
@@ -33,9 +37,14 @@ def load_model_config(
 
 def create_chat_completion_client(model_config) -> ChatCompletionClient:
     if model_config["type"] == "openai":
+        api_key = os.getenv("AZURE_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "No OpenAI API key found (AZURE_OPENAI_API_KEY or OPENAI_API_KEY)"
+            )
         model_client = OpenAIChatCompletionClient(
             model=model_config.get("deployment", model_config["name"]),
-            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+            api_key=api_key,
             base_url=model_config.get("api-base", None),
             api_version=model_config.get("api-version", None),  # type: ignore
             model_info=(
@@ -49,6 +58,7 @@ def create_chat_completion_client(model_config) -> ChatCompletionClient:
         if model_config["type"] == "ollama":
             # Initialize the model client
             model_client = OllamaChatCompletionClient(
+                host=model_config.get("host", "http://localhost:11434"),
                 model=model_config["name"],
                 model_info=model_info,
                 parallel_tool_calls=False,  # type: ignore

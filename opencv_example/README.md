@@ -4,6 +4,10 @@ A minimal example that combines an OpenCV MCP tool server with an AutoGen assist
 
 Note that segmentation and especially measurement performance is currently quite poor, but this is intended as a simple starting point for building image-centric agent workflows.
 
+Example input image:
+
+[![Example input image](./data/HAM10000_images_part_1/ISIC_0029236_gray.jpg)](./data/HAM10000_images_part_1/ISIC_0029236_gray.jpg)
+
 ## What It Does
 
 1. Launches the `opencv-mcp-server` (via `uv run`) and dynamically discovers its tools.
@@ -15,7 +19,7 @@ Note that segmentation and especially measurement performance is currently quite
 
 - Python (compatible with `uv` – typically 3.11+)
 - `uv` installed (https://github.com/astral-sh/uv)
-- OpenAI or Azure OpenAI API key set as one of: `OPENAI_API_KEY` or `AZURE_OPENAI_API_KEY` (loaded via `.env` if present) or access to a local ollama server with a suitable model.
+- OpenAI or Azure OpenAI API key set as one of `OPENAI_API_KEY` or `AZURE_OPENAI_API_KEY` (loaded via `.env` if present), or access to a local ollama server with a suitable model (changed in `load_model_config()`).
 - Packages specified in the project `pyproject.toml` / `uv.lock`
 - `opencv-mcp-server` (fetched automatically by `uv run opencv-mcp-server`)
 - **Probably: A patched FastMCP** - Due to a version incompatibility, you currently (opencv-mcp-server 0.1.1 with latest FastMCP) need to patch ``mcp.server.fastmcp.server.FastMCP.__init__`` to add a description parameter ``description: str | None = None,``so that the openCV MCP server works.
@@ -44,6 +48,7 @@ uv run main.py --interactive
 
 ## Customization
 
+- Use a different model by modifying the `load_model_config()` function in `main.py`.
 - Modify the initial system prompt in `main.py` (`system_message`) to change assistant behavior.
 - Adjust segmentation strategy by editing the initial task string (`initial_task`).
 - Limit or expand tool iterations via `max_tool_iterations` in the `AssistantAgent` constructor.
