@@ -111,7 +111,7 @@ async def main() -> None:
         )
     await Console(
         agent.run_stream(
-            task="what's (3 * 5) - 12?", cancellation_token=CancellationToken()
+            task="what's (3 * 5) - 3?", cancellation_token=CancellationToken()
         )
     )
 
