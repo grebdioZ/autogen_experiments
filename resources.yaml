@@ -10,14 +10,19 @@ models:
       structured_output: true
       multiple_system_messages: false
 
+  - name: "qwen:0.5b" # good for fast testing, but very stupid
+    type: "ollama"
+    host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
+
   - name: "qwen3:8b"
     type: "ollama"
+    host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
 
   - name: "qwen3:30b-a3b"
     type: "ollama"
     host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
 
-  - name: "gpt-oss:20b"
+  - name: "gpt-oss:20b" # good performance, but slower and more expensive than qwen3:30b-a3b
     type: "ollama"
     host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
     info:
