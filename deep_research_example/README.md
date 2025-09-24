@@ -27,7 +27,7 @@ This folder contains a notebook (`deep_research.ipynb`) and sample output transc
    $Env:TAVILY_API_KEY = "your_tavily_key"   # optional (web verification)
    ```
 
-4. Open `deep_research_example/deep_research.ipynb` in VS Code / Jupyter.
+4. Open [deep_research.ipynb](./deep_research.ipynb) in VS Code / Jupyter.
 5. Run cells top → bottom; supply or modify the research question prompt.
 6. Review generated transcript messages and (optionally) inspect token usage CSV.
 
