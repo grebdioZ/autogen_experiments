@@ -14,7 +14,7 @@ models:
     type: "ollama"
     # name: "qwen3:4b" # did not terminate on my RTX2080TI?
 
-  - name: "qwen3"
+  - name: "qwen3:8b"
     type: "ollama"
     host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
 

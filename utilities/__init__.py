@@ -17,6 +17,7 @@ load_dotenv()
 def load_model_config(
     config_path: str | None = None, model_name: str | None = None
 ) -> Dict[str, Any]:
+    load_dotenv(override=True)  # .env may have changed
     """Load configuration from a YAML file."""
     file_path = os.path.dirname(os.path.dirname(__file__))
     if config_path is None:
@@ -24,7 +25,7 @@ def load_model_config(
     with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
 
-    model_name = model_name or os.getenv("DEFAULT_MODEL_NAME") or "GPT-4.1-Nano"
+    model_name = model_name or os.getenv("DEFAULT_MODEL_NAME") or "gpt-oss:20b"
     model = [
         m for m in config["models"] if m.get("name", "").lower() == model_name.lower()
     ][0]
@@ -34,6 +35,7 @@ def load_model_config(
 
 
 def create_chat_completion_client(model_config) -> ChatCompletionClient:
+    load_dotenv()  # .env may have changed
     if model_config["type"] == "openai":
         api_key = os.getenv("AZURE_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
         if not api_key:
