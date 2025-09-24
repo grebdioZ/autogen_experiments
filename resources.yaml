@@ -9,12 +9,11 @@ models:
       json_output: true
       structured_output: true
       multiple_system_messages: false
-  
-  - name: "qwen3:0.6b"
-    type: "ollama"
-    # name: "qwen3:4b" # did not terminate on my RTX2080TI?
 
   - name: "qwen3:8b"
+    type: "ollama"
+
+  - name: "qwen3:30b-a3b"
     type: "ollama"
     host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
 
