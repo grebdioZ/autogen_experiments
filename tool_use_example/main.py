@@ -45,32 +45,28 @@ def divide(a: float, b: float) -> float:
     return a / b
 
 
-async def main() -> None:
-
-    # Setup server params for local filesystem access
+async def provide_tools() -> list:
+    # Setup server params for local filesystem tool access
     math_server = StdioServerParams(
         command="python", args=[os.path.dirname(__file__) + "/math_server.py"]
     )
     add_and_multiply_tools = await mcp_server_tools(math_server)
-    subttract_and_divide_tools = [subtract, divide]
 
-    # Combine the tools from both servers into a single list
-    all_tools = add_and_multiply_tools + subttract_and_divide_tools
+    # Tools through local synchronous functions
+    subtract_and_divide_tools = [subtract, divide]
 
+    # Combine the tools from both sources
+    all_tools = add_and_multiply_tools + subtract_and_divide_tools
     if INCLUDE_WEB_SEARCH:
-
         if False and os.getenv("APIFY_API_KEY"):
+            # HTTP MCP server
             # Setup server params for SSE access
             server_params = SseServerParams(
-                url="https://rag-web-browser.apify.actor/sse",  # Removed limits from URL
-                headers={"Authorization": f"Bearer {os.getenv("APIFY_API_KEY")}"},
+                url="https://rag-web-browser.apify.actor/sse",
+                headers={"Authorization": f"Bearer {os.getenv('APIFY_API_KEY')}"},
                 timeout=30,
             )
-
             # Create the tool adapter for the SSE server
-            # Note: The tool adapter is created using the server_params and the tool name.
-            # Ensure the tool name matches the one expected by the server
-            # You may need to adjust this based on the actual tool name provided by the server
             rag_web_search_tool = await SseMcpToolAdapter.from_server_params(
                 server_params,
                 "rag-web-browser",
@@ -78,19 +74,29 @@ async def main() -> None:
             all_tools.append(rag_web_search_tool)
 
         if os.getenv("TAVILY_API_KEY"):
+            # Custom async HTTP search tool
             all_tools.append(await get_tavily_search_tool())  # type: ignore
+    return all_tools
 
+
+async def main() -> None:
+
+    # Create the model client for LLM interactions
     model_config = load_model_config()
     model_client = create_chat_completion_client(model_config)
+
+    # Get the tools to be used by the agent
+    tools = await provide_tools()
+
+    # Create the assistant agent with the model client and tools
     agent = AssistantAgent(
         name="demo_agent",
         model_client=model_client,
-        tools=all_tools,  # type: ignore
-        reflect_on_tool_use=True,
+        tools=tools,  # type: ignore
+        reflect_on_tool_use=True,  # allows the agent to post-process tool outputs
         system_message=(
-            "You are an intelligent assistant with access to tools such as 'adapter', "
-            "which connects to Apify's rag-web-browser. If you need to search the web, "
-            "use the 'adapter' tool, but always request minimal content. maxResults=1, "
+            "You are an intelligent assistant with access to miscellaneous tools. If you need to search the web, "
+            "use the 'adapter' or 'tavily search' tool, but always request minimal content. maxResults=1, "
             "Only fetch the most relevant and recent information. Avoid large responses "
             "that may exceed token limits by limiting page content size and page count."
         ),
