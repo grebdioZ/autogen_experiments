@@ -1,4 +1,4 @@
-# AG2 / Autogen Experiments – Prototype Multi‑Agent Playground
+# Autogen Experiments – Prototype Multi‑Agent Playground
 
 Collection of small experiments exploring **AutoGen AgentChat**, multi‑agent prompting patterns, tool integration (MCP + custom + web search), and research workflows. Each subfolder has its own README, but they share python environment and some utility code from the ``tools.py`` module.
 
