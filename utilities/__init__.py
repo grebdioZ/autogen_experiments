@@ -3,13 +3,13 @@ import os
 from datetime import datetime
 from typing import Any, Dict
 
-from dotenv import load_dotenv
 import httpx
 import yaml
 from autogen_core.models import ChatCompletionClient, ModelInfo
 from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import SseMcpToolAdapter, SseServerParams
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -53,6 +53,7 @@ def create_chat_completion_client(model_config) -> ChatCompletionClient:
         model_info = (
             ModelInfo(**model_config["info"]) if "info" in model_config else None
         )
+        print("model_config", model_config)
         if model_config["type"] == "ollama":
             # Initialize the model client
             model_client = OllamaChatCompletionClient(

@@ -14,6 +14,21 @@ models:
     type: "ollama"
     # name: "qwen3:4b" # did not terminate on my RTX2080TI?
 
+  - name: "qwen3"
+    type: "ollama"
+    host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
+
+  - name: "gpt-oss:20b"
+    type: "ollama"
+    host: "https://ollama.cloud.intern.mevis.fraunhofer.de"
+    info:
+      family: "gpt-oss"
+      vision: false
+      function_calling: true
+      json_output: true
+      structured_output: true
+      multiple_system_messages: false    
+
   #--------------------------------------------------------------------
   # Azure OpenAI models hosted by Fraunhofer
   # See https://fraunhofer.sharepoint.com/sites/it-sicherheit/SitePages/FhGenie-API.aspx for available FhG models
