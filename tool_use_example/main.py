@@ -94,6 +94,7 @@ async def main() -> None:
         model_client=model_client,
         tools=tools,  # type: ignore
         reflect_on_tool_use=True,  # allows the agent to post-process tool outputs
+        max_tool_iterations=3,
         system_message=(
             "You are an intelligent assistant with access to miscellaneous tools. If you need to search the web, "
             "use the 'adapter' or 'tavily search' tool, but always request minimal content. maxResults=1, "
